@@ -1,0 +1,1216 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Virdmatik • Dijital Vird Asistanı</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2D5B7A;
+            --secondary: #1A3A5F;
+            --accent: #E8B35B;
+            --light: #F8F5F0;
+            --dark: #1A2A3A;
+            --success: #2E7D32;
+            --warning: #ED6C02;
+            --danger: #D32F2F;
+            --gradient: linear-gradient(135deg, var(--primary), var(--secondary));
+            --gradient-accent: linear-gradient(135deg, var(--accent), #D4A017);
+            --border-radius: 16px;
+            --shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--light);
+            color: var(--dark);
+            max-width: 500px;
+            margin: 0 auto;
+            min-height: 100vh;
+            position: relative;
+            padding-bottom: 80px;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.05);
+            overflow-x: hidden;
+        }
+        
+        /* Header Styles */
+        header {
+            background: var(--gradient);
+            color: white;
+            padding: 18px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo-icon {
+            background: var(--accent);
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+            color: var(--secondary);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .logo-text h1 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        .logo-text span {
+            font-size: 0.8rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+        
+        .hamburger-menu {
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 1.8rem;
+            cursor: pointer;
+            padding: 5px;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+        
+        .hamburger-menu:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        /* Main Content */
+        main {
+            padding: 20px;
+            min-height: calc(100vh - 140px);
+        }
+        
+        .page {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Home Page */
+        .date-display {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            border-top: 5px solid var(--accent);
+        }
+        
+        .hijri-date {
+            color: var(--primary);
+            font-weight: 600;
+            margin-top: 5px;
+            font-family: 'Amiri', serif;
+            font-size: 1.1rem;
+        }
+        
+        .greeting {
+            font-size: 1.5rem;
+            color: var(--secondary);
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card.completed {
+            border-top: 4px solid var(--success);
+        }
+        
+        .stat-card.pending {
+            border-top: 4px solid var(--warning);
+        }
+        
+        .stat-card i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            color: var(--primary);
+        }
+        
+        .stat-card h3 {
+            font-size: 1.8rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .stat-card p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .theme-selector {
+            margin-top: 25px;
+        }
+        
+        .theme-selector h2 {
+            margin-bottom: 15px;
+            color: var(--secondary);
+            font-size: 1.3rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .theme-options {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+        
+        .theme-option {
+            min-width: 150px;
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 15px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            border: 2px solid transparent;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+        
+        .theme-option.active {
+            border-color: var(--accent);
+            background: rgba(232, 179, 91, 0.05);
+        }
+        
+        .theme-option:hover {
+            transform: translateY(-3px);
+        }
+        
+        .theme-icon {
+            font-size: 2rem;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+        
+        /* Virdlerim Page */
+        .vird-list {
+            margin-top: 15px;
+        }
+        
+        .vird-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 18px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .vird-info h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .vird-info .type {
+            font-size: 0.8rem;
+            color: var(--primary);
+            background: rgba(45, 91, 122, 0.1);
+            padding: 3px 10px;
+            border-radius: 20px;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .vird-progress {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .progress-circle {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: conic-gradient(var(--primary) 0%, #eee 0%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .progress-circle::before {
+            content: '';
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: white;
+        }
+        
+        .progress-text {
+            position: relative;
+            font-weight: 600;
+            color: var(--dark);
+        }
+        
+        .vird-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .vird-btn {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--gradient);
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .vird-btn:hover {
+            transform: scale(1.1);
+        }
+        
+        /* Vird Ekle Page */
+        .form-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-top: 10px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--secondary);
+            font-weight: 500;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #eee;
+            border-radius: 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 1rem;
+            transition: var(--transition);
+        }
+        
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+        
+        .form-control::placeholder {
+            color: #aaa;
+        }
+        
+        .select-wrapper {
+            position: relative;
+        }
+        
+        .select-wrapper select {
+            appearance: none;
+            padding-right: 40px;
+        }
+        
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            pointer-events: none;
+        }
+        
+        .btn-submit {
+            background: var(--gradient);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 18px;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(45, 91, 122, 0.2);
+        }
+        
+        /* Tesbih Tema */
+        .tesbih-container {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 30px 20px;
+            box-shadow: var(--shadow);
+            text-align: center;
+            margin-top: 20px;
+        }
+        
+        .tesbih-display {
+            margin: 30px 0;
+        }
+        
+        .tesbih-bead {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 30px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: 600;
+            box-shadow: 0 10px 25px rgba(45, 91, 122, 0.3);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s;
+        }
+        
+        .tesbih-bead:active {
+            transform: scale(0.95);
+        }
+        
+        .tesbih-counter {
+            font-size: 3rem;
+            color: var(--secondary);
+            font-weight: 700;
+            margin: 20px 0;
+        }
+        
+        .tesbih-controls {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .tesbih-btn {
+            padding: 12px 25px;
+            border-radius: 50px;
+            border: none;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .tesbih-btn.reset {
+            background: #f0f0f0;
+            color: var(--dark);
+        }
+        
+        .tesbih-btn.complete {
+            background: var(--gradient-accent);
+            color: white;
+        }
+        
+        .tesbih-btn:hover {
+            transform: translateY(-3px);
+        }
+        
+        /* Ayarlar Page */
+        .settings-list {
+            margin-top: 20px;
+        }
+        
+        .setting-item {
+            background: white;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: var(--shadow);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .setting-info h3 {
+            font-size: 1.1rem;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+        
+        .setting-info p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            width: 60px;
+            height: 30px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 34px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 22px;
+            width: 22px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(30px);
+        }
+        
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0;
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
+            z-index: 100;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #888;
+            text-decoration: none;
+            font-size: 0.8rem;
+            transition: var(--transition);
+            position: relative;
+            padding: 5px 10px;
+            border-radius: 10px;
+        }
+        
+        .nav-item.active {
+            color: var(--primary);
+            background: rgba(45, 91, 122, 0.05);
+        }
+        
+        .nav-item i {
+            font-size: 1.4rem;
+            margin-bottom: 4px;
+        }
+        
+        .notification-badge {
+            position: absolute;
+            top: -5px;
+            right: 0;
+            background: var(--danger);
+            color: white;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7rem;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--gradient);
+            color: white;
+            text-align: center;
+            padding: 20px;
+            margin-top: 30px;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+        
+        footer p {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+        
+        /* Responsive */
+        @media (max-width: 480px) {
+            .logo-text h1 {
+                font-size: 1.2rem;
+            }
+            
+            .stat-card h3 {
+                font-size: 1.5rem;
+            }
+            
+            .tesbih-counter {
+                font-size: 2.5rem;
+            }
+        }
+        
+        /* Islami Pattern */
+        .islamic-pattern {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%232d5b7a' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+            pointer-events: none;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- İslami Desen Arkaplan -->
+    <div class="islamic-pattern"></div>
+    
+    <!-- Header -->
+    <header>
+        <div class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-book-quran"></i>
+            </div>
+            <div class="logo-text">
+                <h1>Virdmatik</h1>
+                <span>Dijital Vird Asistanı</span>
+            </div>
+        </div>
+        <button class="hamburger-menu" id="hamburgerMenu">
+            <i class="fas fa-bars"></i>
+        </button>
+    </header>
+    
+    <!-- Ana İçerik -->
+    <main>
+        <!-- Ana Sayfa -->
+        <div class="page active" id="homePage">
+            <div class="date-display">
+                <h2 id="currentDate">1 Ocak 2023, Pazar</h2>
+                <div class="hijri-date" id="hijriDate">1 Cemaziyelevvel 1445</div>
+            </div>
+            
+            <h2 class="greeting" id="greetingText">Hoş geldiniz, Virdmatik Kullanıcısı!</h2>
+            
+            <div class="quick-stats">
+                <div class="stat-card completed">
+                    <i class="fas fa-check-circle"></i>
+                    <h3>7</h3>
+                    <p>Tamamlanan Vird</p>
+                </div>
+                <div class="stat-card pending">
+                    <i class="fas fa-clock"></i>
+                    <h3>3</h3>
+                    <p>Bekleyen Vird</p>
+                </div>
+            </div>
+            
+            <div class="theme-selector">
+                <h2><i class="fas fa-palette"></i> Tema Seçiniz</h2>
+                <div class="theme-options">
+                    <div class="theme-option active" data-theme="default">
+                        <div class="theme-icon">
+                            <i class="fas fa-book"></i>
+                        </div>
+                        <h3>Geleneksel</h3>
+                        <p>Yazı ve sayaç</p>
+                    </div>
+                    <div class="theme-option" data-theme="tesbih">
+                        <div class="theme-icon">
+                            <i class="fas fa-praying-hands"></i>
+                        </div>
+                        <h3>Tesbih Modu</h3>
+                        <p>Dokunmatik tesbih</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Virdlerim -->
+        <div class="page" id="virdsPage">
+            <h2 class="greeting"><i class="fas fa-list-check"></i> Virdlerim</h2>
+            <div class="vird-list" id="virdList">
+                <!-- Virdler buraya dinamik olarak eklenecek -->
+            </div>
+        </div>
+        
+        <!-- Vird Ekle -->
+        <div class="page" id="addVirdPage">
+            <h2 class="greeting"><i class="fas fa-plus-circle"></i> Yeni Vird Ekle</h2>
+            <div class="form-container">
+                <div class="form-group">
+                    <label for="virdText">Vird Giriniz</label>
+                    <input type="text" id="virdText" class="form-control" placeholder="Örn: Ya Latif">
+                </div>
+                
+                <div class="form-group">
+                    <label for="virdType">Vird Türü Seçiniz</label>
+                    <div class="select-wrapper">
+                        <select id="virdType" class="form-control">
+                            <option value="vird">Vird</option>
+                            <option value="esma">Esma</option>
+                            <option value="zikir">Zikir</option>
+                            <option value="dua">Dua</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="virdCount">Tekrar Sayısı</label>
+                    <input type="number" id="virdCount" class="form-control" placeholder="Örn: 33" min="1" value="33">
+                </div>
+                
+                <button class="btn-submit" id="addVirdBtn">
+                    <i class="fas fa-save"></i> Virdi Kaydet
+                </button>
+            </div>
+        </div>
+        
+        <!-- Tesbih Modu -->
+        <div class="page" id="tesbihPage">
+            <h2 class="greeting"><i class="fas fa-praying-hands"></i> Tesbih Modu</h2>
+            <div class="tesbih-container">
+                <div class="tesbih-display">
+                    <div class="tesbih-counter" id="tesbihCounter">0</div>
+                    <div class="tesbih-bead" id="tesbihBead">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <p>Dokunun veya aşağı kaydırın</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="tesbihText">Tesbih Metni</label>
+                    <input type="text" id="tesbihText" class="form-control" placeholder="Örn: Subhanallah" value="Subhanallah">
+                </div>
+                
+                <div class="tesbih-controls">
+                    <button class="tesbih-btn reset" id="tesbihReset">
+                        <i class="fas fa-redo"></i> Sıfırla
+                    </button>
+                    <button class="tesbih-btn complete" id="tesbihComplete">
+                        <i class="fas fa-check"></i> Tamamla
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Ayarlar -->
+        <div class="page" id="settingsPage">
+            <h2 class="greeting"><i class="fas fa-cog"></i> Ayarlar</h2>
+            <div class="settings-list">
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Bildirimler</h3>
+                        <p>Vird hatırlatmalarını aç/kapat</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Karanlık Mod</h3>
+                        <p>Gece temasına geç</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Otomatik Tamamlama</h3>
+                        <p>Eksik virdleri sonraki güne aktar</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h3>Hicri Takvim</h3>
+                        <p>Hicri tarihi göster</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <!-- Footer -->
+    <footer>
+        <p>Virdmatik • Dijital Vird Asistanı • <span id="footerDate">1 Ocak 2023</span> • <span id="footerHijriDate">1 Cemaziyelevvel 1445</span></p>
+        <p>Tüm hakları saklıdır. © 2023 Virdmatik</p>
+    </footer>
+    
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" data-page="home">
+            <i class="fas fa-home"></i>
+            <span>Ana Sayfa</span>
+        </a>
+        
+        <a href="#" class="nav-item" data-page="virds">
+            <i class="fas fa-book-quran"></i>
+            <span>Virdlerim</span>
+            <div class="notification-badge" id="virdNotification">3</div>
+        </a>
+        
+        <a href="#" class="nav-item" data-page="add">
+            <i class="fas fa-plus-circle"></i>
+            <span>Vird Ekle</span>
+        </a>
+        
+        <a href="#" class="nav-item" data-page="tesbih">
+            <i class="fas fa-praying-hands"></i>
+            <span>Tesbih</span>
+        </a>
+        
+        <a href="#" class="nav-item" data-page="settings">
+            <i class="fas fa-cog"></i>
+            <span>Ayarlar</span>
+        </a>
+    </nav>
+
+    <script>
+        // Tarih ve saat güncelleme
+        function updateDateTime() {
+            const now = new Date();
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            const formattedDate = now.toLocaleDateString('tr-TR', options);
+            
+            // Hicri tarih hesaplama (basit yaklaşım)
+            const hijriDate = calculateHijriDate(now);
+            
+            // Elementleri güncelle
+            document.getElementById('currentDate').textContent = formattedDate;
+            document.getElementById('hijriDate').textContent = hijriDate;
+            document.getElementById('footerDate').textContent = now.toLocaleDateString('tr-TR');
+            document.getElementById('footerHijriDate').textContent = hijriDate.split(' ')[0];
+            
+            // Selamlama mesajı
+            const hour = now.getHours();
+            let greeting = "Hoş geldiniz!";
+            
+            if (hour < 12) greeting = "Hayırlı sabahlar!";
+            else if (hour < 17) greeting = "Hayırlı öğlenler!";
+            else if (hour < 21) greeting = "Hayırlı akşamlar!";
+            else greeting = "Hayırlı geceler!";
+            
+            document.getElementById('greetingText').textContent = greeting;
+        }
+        
+        // Basit Hicri tarih hesaplama
+        function calculateHijriDate(gregorianDate) {
+            // Bu basit bir hesaplamadır, gerçek Hicri takvim hesaplaması daha karmaşıktır
+            const hijriMonths = ['Muharrem', 'Safer', 'Rebiülevvel', 'Rebiülahir', 'Cemaziyelevvel', 'Cemaziyelahir', 
+                                 'Recep', 'Şaban', 'Ramazan', 'Şevval', 'Zilkade', 'Zilhicce'];
+            
+            // Basit bir yaklaşım: Miladi yıldan 622 çıkar, 1.03 tarihine göre ayarlama yap
+            const hijriYear = Math.floor((gregorianDate.getFullYear() - 622) * 1.03);
+            const hijriMonth = hijriMonths[gregorianDate.getMonth()];
+            const hijriDay = gregorianDate.getDate() % 29 + 1;
+            
+            return `${hijriDay} ${hijriMonth} ${hijriYear + 1}`;
+        }
+        
+        // Sayfa değiştirme
+        function changePage(pageId) {
+            // Tüm sayfaları gizle
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            
+            // Hedef sayfayı göster
+            document.getElementById(pageId).classList.add('active');
+            
+            // Bottom navigasyonu güncelle
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Aktif sayfaya göre navigasyon item'ını aktif yap
+            let navItem;
+            switch(pageId) {
+                case 'homePage': navItem = document.querySelector('[data-page="home"]'); break;
+                case 'virdsPage': navItem = document.querySelector('[data-page="virds"]'); break;
+                case 'addVirdPage': navItem = document.querySelector('[data-page="add"]'); break;
+                case 'tesbihPage': navItem = document.querySelector('[data-page="tesbih"]'); break;
+                case 'settingsPage': navItem = document.querySelector('[data-page="settings"]'); break;
+            }
+            
+            if (navItem) {
+                navItem.classList.add('active');
+            }
+        }
+        
+        // Tema değiştirme
+        function changeTheme(theme) {
+            const themeOptions = document.querySelectorAll('.theme-option');
+            themeOptions.forEach(option => {
+                option.classList.remove('active');
+                if (option.dataset.theme === theme) {
+                    option.classList.add('active');
+                }
+            });
+            
+            // Görünümü değiştir
+            if (theme === 'tesbih') {
+                changePage('tesbihPage');
+            } else {
+                changePage('homePage');
+            }
+        }
+        
+        // Vird ekleme
+        function addVird() {
+            const virdText = document.getElementById('virdText').value.trim();
+            const virdType = document.getElementById('virdType').value;
+            const virdCount = document.getElementById('virdCount').value;
+            
+            if (!virdText) {
+                alert('Lütfen vird metnini giriniz.');
+                return;
+            }
+            
+            if (!virdCount || virdCount < 1) {
+                alert('Lütfen geçerli bir sayı giriniz.');
+                return;
+            }
+            
+            // Vird listesine ekle
+            const virdList = document.getElementById('virdList');
+            
+            const virdItem = document.createElement('div');
+            virdItem.className = 'vird-item';
+            
+            // Rastgele tamamlanma yüzdesi (0-100 arası)
+            const progress = Math.floor(Math.random() * 100);
+            
+            virdItem.innerHTML = `
+                <div class="vird-info">
+                    <h3>${virdText}</h3>
+                    <div class="type">${virdType.charAt(0).toUpperCase() + virdType.slice(1)}</div>
+                    <p>Hedef: ${virdCount} tekrar</p>
+                </div>
+                <div class="vird-progress">
+                    <div class="progress-circle" style="background: conic-gradient(var(--primary) ${progress}%, #eee ${progress}%)">
+                        <span class="progress-text">${progress}%</span>
+                    </div>
+                    <div class="vird-actions">
+                        <button class="vird-btn" onclick="completeVird(this)"><i class="fas fa-check"></i></button>
+                        <button class="vird-btn" onclick="deleteVird(this)" style="background: var(--danger)"><i class="fas fa-trash"></i></button>
+                    </div>
+                </div>
+            `;
+            
+            virdList.prepend(virdItem);
+            
+            // Formu temizle
+            document.getElementById('virdText').value = '';
+            document.getElementById('virdCount').value = '33';
+            
+            // Virdlerim sayfasına geç
+            changePage('virdsPage');
+            
+            // Bildirim sayısını güncelle
+            updateNotificationCount();
+            
+            alert('Vird başarıyla eklendi!');
+        }
+        
+        // Vird tamamlama
+        function completeVird(button) {
+            const virdItem = button.closest('.vird-item');
+            const progressCircle = virdItem.querySelector('.progress-circle');
+            const progressText = virdItem.querySelector('.progress-text');
+            
+            // Tamamlandı olarak işaretle
+            progressCircle.style.background = 'conic-gradient(var(--success) 100%, #eee 0%)';
+            progressText.textContent = '100%';
+            progressText.style.color = 'var(--success)';
+            
+            // Tamamlanan butonu devre dışı bırak
+            button.disabled = true;
+            button.style.opacity = '0.5';
+            button.innerHTML = '<i class="fas fa-check-double"></i>';
+            
+            // Bildirim sayısını güncelle
+            updateNotificationCount();
+        }
+        
+        // Vird silme
+        function deleteVird(button) {
+            if (confirm('Bu virdi silmek istediğinizden emin misiniz?')) {
+                const virdItem = button.closest('.vird-item');
+                virdItem.remove();
+                updateNotificationCount();
+            }
+        }
+        
+        // Bildirim sayısını güncelle
+        function updateNotificationCount() {
+            const virdItems = document.querySelectorAll('.vird-item');
+            let incompleteCount = 0;
+            
+            virdItems.forEach(item => {
+                const progressText = item.querySelector('.progress-text').textContent;
+                const progress = parseInt(progressText);
+                if (progress < 100) incompleteCount++;
+            });
+            
+            const notificationBadge = document.getElementById('virdNotification');
+            if (incompleteCount > 0) {
+                notificationBadge.textContent = incompleteCount;
+                notificationBadge.style.display = 'flex';
+            } else {
+                notificationBadge.style.display = 'none';
+            }
+        }
+        
+        // Tesbih işlevleri
+        let tesbihCount = 0;
+        
+        function incrementTesbih() {
+            tesbihCount++;
+            document.getElementById('tesbihCounter').textContent = tesbihCount;
+            
+            // Tesbih tanesi animasyonu
+            const tesbihBead = document.getElementById('tesbihBead');
+            tesbihBead.style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                tesbihBead.style.transform = 'scale(1)';
+            }, 100);
+        }
+        
+        function resetTesbih() {
+            tesbihCount = 0;
+            document.getElementById('tesbihCounter').textContent = tesbihCount;
+        }
+        
+        function completeTesbih() {
+            alert(`Tebrikler! ${tesbihCount} adet "${document.getElementById('tesbihText').value}" tesbihi tamamladınız.`);
+            resetTesbih();
+        }
+        
+        // Sayfa yüklendiğinde çalışacak kodlar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Tarih ve saat güncelle
+            updateDateTime();
+            
+            // Örnek virdler ekle
+            const sampleVirds = [
+                { text: "Subhanallah", type: "zikir", count: 33, progress: 100 },
+                { text: "Elhamdülillah", type: "zikir", count: 33, progress: 75 },
+                { text: "Allahu Ekber", type: "zikir", count: 33, progress: 50 },
+                { text: "Ya Latif", type: "esma", count: 100, progress: 30 },
+                { text: "Estağfirullah", type: "dua", count: 100, progress: 20 }
+            ];
+            
+            sampleVirds.forEach(vird => {
+                const virdList = document.getElementById('virdList');
+                const virdItem = document.createElement('div');
+                virdItem.className = 'vird-item';
+                
+                virdItem.innerHTML = `
+                    <div class="vird-info">
+                        <h3>${vird.text}</h3>
+                        <div class="type">${vird.type.charAt(0).toUpperCase() + vird.type.slice(1)}</div>
+                        <p>Hedef: ${vird.count} tekrar</p>
+                    </div>
+                    <div class="vird-progress">
+                        <div class="progress-circle" style="background: conic-gradient(var(--primary) ${vird.progress}%, #eee ${vird.progress}%)">
+                            <span class="progress-text">${vird.progress}%</span>
+                        </div>
+                        <div class="vird-actions">
+                            <button class="vird-btn" onclick="completeVird(this)"><i class="fas fa-check"></i></button>
+                            <button class="vird-btn" onclick="deleteVird(this)" style="background: var(--danger)"><i class="fas fa-trash"></i></button>
+                        </div>
+                    </div>
+                `;
+                
+                virdList.appendChild(virdItem);
+            });
+            
+            // Bildirim sayısını güncelle
+            updateNotificationCount();
+            
+            // Event Listener'lar
+            // Bottom navigasyon
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const page = this.dataset.page;
+                    
+                    switch(page) {
+                        case 'home': changePage('homePage'); break;
+                        case 'virds': changePage('virdsPage'); break;
+                        case 'add': changePage('addVirdPage'); break;
+                        case 'tesbih': changePage('tesbihPage'); break;
+                        case 'settings': changePage('settingsPage'); break;
+                    }
+                });
+            });
+            
+            // Tema seçenekleri
+            document.querySelectorAll('.theme-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    changeTheme(this.dataset.theme);
+                });
+            });
+            
+            // Vird ekle butonu
+            document.getElementById('addVirdBtn').addEventListener('click', addVird);
+            
+            // Tesbih tanesi
+            const tesbihBead = document.getElementById('tesbihBead');
+            tesbihBead.addEventListener('click', incrementTesbih);
+            
+            // Tesbih için kaydırma hareketi
+            let startY = 0;
+            tesbihBead.addEventListener('touchstart', function(e) {
+                startY = e.touches[0].clientY;
+            });
+            
+            tesbihBead.addEventListener('touchend', function(e) {
+                const endY = e.changedTouches[0].clientY;
+                if (startY - endY > 30) { // Yukarı kaydırma
+                    incrementTesbih();
+                }
+            });
+            
+            // Tesbih kontrol butonları
+            document.getElementById('tesbihReset').addEventListener('click', resetTesbih);
+            document.getElementById('tesbihComplete').addEventListener('click', completeTesbih);
+            
+            // Hamburger menü
+            document.getElementById('hamburgerMenu').addEventListener('click', function() {
+                alert('Menü özelliği geliştirme aşamasındadır. İlerleyen versiyonlarda eklenecektir.');
+            });
+            
+            // Form placeholder'ları
+            const virdTextInput = document.getElementById('virdText');
+            virdTextInput.addEventListener('focus', function() {
+                this.removeAttribute('placeholder');
+            });
+            
+            virdTextInput.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.setAttribute('placeholder', 'Örn: Ya Latif');
+                }
+            });
+        });
+        
+        // Her dakika tarihi güncelle
+        setInterval(updateDateTime, 60000);
+    </script>
+</body>
+</html>
